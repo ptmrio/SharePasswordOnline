@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Password Online</title>
+    <style type="text/css">
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+        }
+
+        :root {
+            --accent-color: #ff9800;
+            --accent-color-dark: #e67e00;
+            --background-color: #f4f4f4;
+            --form-background-color: #ffffff;
+            --text-color: #333333;
+            --text-color-muted: #666666;
+            --input-border-color: #cccccc;
+            --readonly-background-color: #e9e9e9;
+            --readonly-border-color: #999999;
+            --border-radius: 0.5rem;
+            --gap: 1rem;
+        }
+
+        .even-spacing {
+            --gap: 1rem;
+            display: grid;
+            gap: var(--gap);
+        }
+
+        .even-spacing--large {
+            --gap: 2rem;
+        }
+
+        .even-spacing--small {
+            --gap: 0.2rem;
+        }
+
+        body {
+            place-items: center;
+            align-content: center;
+            min-height: 100dvh;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            background-color: var(--background-color);
+            padding: var(--gap);
+            color: var(--text-color);
+        }
+
+        h1 {
+            font-size: 2rem;
+            text-align: center;
+        }
+
+        p {
+            line-height: 1.45;
+        }
+
+        form {
+            background-color: var(--form-background-color);
+            padding: var(--gap);
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: min(1024px, 90vw);
+        }
+
+        label {
+            display: block;
+            font-size: 1rem;
+        }
+
+        input {
+            font-size: 1rem;
+            padding: 5px;
+            width: 100%;
+            border: 1px solid var(--input-border-color);
+            border-radius: var(--border-radius);
+        }
+
+        input:read-only {
+            background-color: var(--readonly-background-color);
+            border-color: var(--readonly-border-color);
+        }
+
+        button {
+            transition: all 0.3s ease;
+        }
+
+        button[type="submit"] {
+            justify-self: center;
+            background-color: var(--accent-color);
+            color: #fff;
+            font-size: 1rem;
+            padding: 10px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+        }
+
+        button[type="submit"]:hover {
+            background-color: var(--accent-color-dark);
+        }
+
+        dialog {
+            border: none;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3), 0 0 0 100vw rgb(0 0 0 / 0.5);
+            padding: var(--gap);
+            width: 100%;
+            max-width: min(1024px, 90vw);
+            background-color: var(--form-background-color);
+            opacity: 0;
+            transition: all 1s ease;
+            pointer-events: none;
+            margin: auto;
+        }
+
+        dialog[open] {
+            display: grid;
+            gap: var(--gap);
+            pointer-events: auto;
+            animation: slide-down 500ms forwards, fade-in 250ms forwards;
+        }
+
+        dialog[closing] {
+            pointer-events: none;
+            inset: 0;
+            animation: fade-out 250ms forwards;
+        }
+
+        dialog::backdrop {
+            background: rgb(0 0 0 / 0.5);
+            opacity: 0;
+        }
+
+        button[data-id="close-dialog"] {
+            background-color: #ccc;
+            color: #333;
+            font-size: 1rem;
+            padding: 10px;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            display: block;
+            width: 100%;
+        }
+
+        button[data-id="close-dialog"]:hover {
+            background-color: #bbb;
+        }
+
+        .text {
+            color: var(--text-color-muted);
+            max-width: min(1024px, 90vw);
+            margin: auto;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        @keyframes fade-in {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        @keyframes fade-out {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slide-down {
+            0% {
+                transform: translateY(-20%);
+            }
+
+            100% {
+                transform: translateY(0%);
+            }
+        }
+
+        @keyframes shakeX {
+
+            from,
+            to {
+                transform: translate3d(0, 0, 0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translate3d(-10px, 0, 0);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translate3d(10px, 0, 0);
+            }
+        }
+
+        .shake {
+            animation: shakeX 0.82s cubic-bezier(.36, .07, .19, .97) both;
+        }
+    </style>
+</head>
+
+<body class="even-spacing even-spacing--large">
+    <h1>Send Password Online</h1>
+
+    <p class="text text-center">Sharing passwords over the internet is never a great idea.
+        However if you absolutely have to do it, use this page to encrypt your secret (password, credit card number, etc.) and share the newly created link and the passphrase using two separate ways (e.g. Text and Phone, WhatsApp and Signal, Slack and In-Person-Communication). The receiver now can decrypt the secret with the passphrase you provided.</p>
+
+    <form class="even-spacing" data-id="encryption-form">
+        <div class="even-spacing even-spacing--small" data-id="secret-container">
+            <label for="message">Secret:</label>
+            <input type="text" data-id="message" name="message" autocomplete="false" autofocus="true">
+        </div>
+        <div class="even-spacing even-spacing--small">
+            <label for="passphrase">Passphrase:</label>
+            <input type="password" data-id="passphrase" name="passphrase">
+        </div>
+        <button type="submit">Generate Link</button>
+    </form>
+
+    <div class="even-spacing text">
+        <div class="even-spacing even-spacing--small">
+            <h2>How does this work?</h2>
+            <p>Enter a secret and a passphrase. The passphrase is used to encrypt the secret and generate a link. The link is then sent to the recipient. The recipient can now enter the passphrase again in order to decrypt the secret.</p>
+        </div>
+        <div class="even-spacing even-spacing--small">
+            <h2>Is this safe?</h2>
+            <p>Encryption, link generation and decryption happens 100% on the client side. Nothing is stored or tracked. Just plain vanilla javascript! Right-click and inspect the code yourself or got GitHub to inspect it there. As long as your device and the device of the receipient is safe, this should be a pretty secure way to send and receive passwords.</p>
+            <p>But please, still be careful. Share secrets only with people you trust!</p>
+        </div>
+        <div class="even-spacing even-spacing--small">
+            <h2>Thanks, can I contribue?</h2>
+            <p>You may contribute on GitHub. Or may I suggest you buy me a beer?</p>
+            <p>PayPal: paypal.me/g.petermeir</p>
+            <p>Bitcoin Address: x0123</p>
+        </div>
+    </div>
+
+    <dialog class="even-spacing" data-id="link-dialog">
+        <h2>Generated Link</h2>
+        <div class="even-spacing even-spacing--small">
+            <p>Copy this link and send it via your preferred method. Tell him the passphrase in a separate way, to protect the secret:</p>
+            <input type="text" data-id="generated-link" readonly>
+        </div>
+        <button data-id="close-dialog">Close</button>
+    </dialog>
+    <script src="main.js"></script>
+</body>
+
+</html>
