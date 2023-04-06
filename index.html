@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send Password Online</title>
+    <title>Share Password Online</title>
     <style type="text/css">
         /* Reset some default styles */
         * {
@@ -28,20 +28,6 @@
             --gap: 1rem;
         }
 
-        .even-spacing {
-            --gap: 1rem;
-            display: grid;
-            gap: var(--gap);
-        }
-
-        .even-spacing--large {
-            --gap: 2rem;
-        }
-
-        .even-spacing--small {
-            --gap: 0.2rem;
-        }
-
         body {
             place-items: center;
             align-content: center;
@@ -49,7 +35,6 @@
             font-family: Arial, sans-serif;
             line-height: 1.6;
             background-color: var(--background-color);
-            padding: var(--gap);
             color: var(--text-color);
         }
 
@@ -64,7 +49,6 @@
 
         form {
             background-color: var(--form-background-color);
-            padding: var(--gap);
             border-radius: var(--border-radius);
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -77,7 +61,7 @@
         }
 
         input {
-            font-size: 1rem;
+            font-size: 1.25rem;
             padding: 5px;
             width: 100%;
             border: 1px solid var(--input-border-color);
@@ -90,22 +74,30 @@
         }
 
         button {
-            transition: all 0.3s ease;
-        }
+            --button-color: #333;
+            --button-background-color: #ccc;
+            --button-background-color-hover: #bbb;
 
-        button[type="submit"] {
+            background-color: var(--button-background-color);
+            color: var(--button-color);
             justify-self: center;
-            background-color: var(--accent-color);
-            color: #fff;
             font-size: 1rem;
-            padding: 10px;
+            padding: calc(var(--gap) / 1.5) var(--gap);
             border: none;
             border-radius: var(--border-radius);
             cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        button[type="submit"]:hover {
-            background-color: var(--accent-color-dark);
+        button:hover {
+            background-color: var(--button-background-color-hover);
+        }
+
+        button[type="submit"] {
+            --button-color: #fff;
+            --button-background-color: var(--accent-color);
+            --button-background-color-hover: var(--accent-color-dark);
+
         }
 
         dialog {
@@ -140,20 +132,20 @@
             opacity: 0;
         }
 
-        button[data-id="close-dialog"] {
-            background-color: #ccc;
-            color: #333;
-            font-size: 1rem;
-            padding: 10px;
-            border: none;
-            border-radius: var(--border-radius);
-            cursor: pointer;
-            display: block;
-            width: 100%;
+        /* Utility classes */
+        .even-spacing {
+            --gap: 1rem;
+            display: grid;
+            gap: var(--gap);
+            padding: var(--gap);
         }
 
-        button[data-id="close-dialog"]:hover {
-            background-color: #bbb;
+        .even-spacing--large {
+            --gap: 2rem;
+        }
+
+        .even-spacing--small {
+            --gap: 0.2rem;
         }
 
         .text {
@@ -165,6 +157,79 @@
         .text-center {
             text-align: center;
         }
+
+        /* Validation  */
+        form.validated input:valid {
+            --hue: 122;
+            --saturation: 39%;
+            --lightness: 49%;
+            border-color: hsla(var(--hue), var(--saturation), var(--lightness), 0.5);
+            outline: none;
+            background-color: hsla(var(--hue), var(--saturation), var(--lightness), 0.1);
+        }
+
+        form.validated input:invalid {
+            --hue: 4;
+            --saturation: 90%;
+            --lightness: 58%;
+            border-color: hsla(var(--hue), var(--saturation), var(--lightness), 0.5);
+            outline: none;
+            background-color: hsla(var(--hue), var(--saturation), var(--lightness), 0.1);
+        }
+
+        form.validated input:hover,
+        form.validated input:focus {
+            box-shadow: 0 2px 5px hsla(var(--hue), var(--saturation), var(--lightness), 0.5);
+        }
+
+
+        /* Components */
+
+        /* Components: ToolTip */
+        .tooltip-container {
+            display: inline-flex;
+            position: relative;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .tooltip {
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%);
+            transition: opacity 0.3s ease-in-out;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .tooltip-container.active .tooltip {
+            opacity: 1;
+        }
+
+        .tooltip-inner {
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .tooltip::before {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+
+
+        /* Animations */
 
         @keyframes fade-in {
             0% {
@@ -226,19 +291,19 @@
 </head>
 
 <body class="even-spacing even-spacing--large">
-    <h1>Send Password Online</h1>
+    <h1>Share Password Online</h1>
 
     <p class="text text-center">Sharing passwords over the internet is never a great idea.
         However if you absolutely have to do it, use this page to encrypt your secret (password, credit card number, etc.) and share the newly created link and the passphrase using two separate ways (e.g. Text and Phone, WhatsApp and Signal, Slack and In-Person-Communication). The receiver now can decrypt the secret with the passphrase you provided.</p>
 
-    <form class="even-spacing" data-id="encryption-form">
+    <form class="even-spacing" data-id="encryption-form" novalidate>
         <div class="even-spacing even-spacing--small" data-id="secret-container">
             <label for="message">Secret:</label>
-            <input type="text" data-id="message" name="message" autocomplete="false" autofocus="true">
+            <input type="text" data-id="message" name="message" required maxlength="512" autocomplete="off" autofocus="true">
         </div>
         <div class="even-spacing even-spacing--small">
             <label for="passphrase">Passphrase:</label>
-            <input type="password" data-id="passphrase" name="passphrase">
+            <input type="password" data-id="passphrase" name="passphrase" required>
         </div>
         <button type="submit">Generate Link</button>
     </form>
@@ -250,14 +315,15 @@
         </div>
         <div class="even-spacing even-spacing--small">
             <h2>Is this safe?</h2>
-            <p>Encryption, link generation and decryption happens 100% on the client side. Nothing is stored or tracked. Just plain vanilla javascript! Right-click and inspect the code yourself or got GitHub to inspect it there. As long as your device and the device of the receipient is safe, this should be a pretty secure way to send and receive passwords.</p>
+            <p>Encryption, link generation and decryption happens 100% on the client side. Nothing is stored or tracked. Just plain vanilla javascript! Right-click and inspect the code yourself or <a href="https://github.com/ptmrio/SharePasswordOnline">go to GitHub to inspect it there</a>. As long as your device and the device of the receipient is safe, this should be a pretty secure way to send
+                and receive passwords.</p>
             <p>But please, still be careful. Share secrets only with people you trust!</p>
         </div>
         <div class="even-spacing even-spacing--small">
             <h2>Thanks, can I contribue?</h2>
-            <p>You may contribute on GitHub. Or may I suggest you buy me a beer?</p>
-            <p>PayPal: paypal.me/g.petermeir</p>
-            <p>Bitcoin Address: x0123</p>
+            <p>You may contribute on <a href="https://github.com/ptmrio/SharePasswordOnline">GitHub</a>. Or may I suggest you buy me a beer?</p>
+            <p>PayPal: <a href="https://www.paypal.com/paypalme/my/profile">paypal.me/Petermeir</a></p>
+            <p>Bitcoin Address: 3JzyeyJBhRws83PdiiaQ2KzcCZPZumnigX</p>
         </div>
     </div>
 
@@ -265,7 +331,15 @@
         <h2>Generated Link</h2>
         <div class="even-spacing even-spacing--small">
             <p>Copy this link and send it via your preferred method. Tell him the passphrase in a separate way, to protect the secret:</p>
-            <input type="text" data-id="generated-link" readonly>
+            <div class="tooltip-container">
+                <input type="text" data-id="generated-link" readonly>
+                <div class="tooltip">
+                    <div class="tooltip-inner">
+                        Copied!
+                    </div>
+                </div>
+            </div>
+
         </div>
         <button data-id="close-dialog">Close</button>
     </dialog>

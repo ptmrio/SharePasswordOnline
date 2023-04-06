@@ -15,17 +15,21 @@ document.addEventListener('DOMContentLoaded', () => {
     const message = messageInput.value;
     const passphrase = passphraseInput.value;
 
-    if (passphrase) {
+    // validate the message and passphrase
+    encryptionForm.classList.add('validated');
+    encryptionForm.reportValidity();
+
+    if (encryptionForm.checkValidity() && passphrase) {
       
-      if (!urlParams.has('encryptedMessage')) {
-        const encryptedMessage = await encryptMessage(message, passphrase);
-        const link = generateLink(encryptedMessage);
+      if (!urlParams.has('encryptedSecret')) {
+        const encryptedSecret = await encryptSecret(message, passphrase);
+        const link = generateLink(encryptedSecret);
         generatedLinkInput.value = link;
         showDialog(linkDialog); // Show the dialog
       } else {
-          decryptMessage(urlParams.get('encryptedMessage'), passphrase).then((decryptedMessage) => {
+          decryptSecret(urlParams.get('encryptedSecret'), passphrase).then((decryptedMessage) => {
           messageInput.value = decryptedMessage;
-          secretContainer.style.display = 'block';
+          secretContainer.style.display = 'grid';
           setTimeout(() => {
             secretContainer.style.opacity = '1';
             secretContainer.classList.add('shake');
@@ -39,12 +43,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Encrypt and Decrypt functions remain unchanged
 
-  function generateLink(encryptedMessage) {
-    return `https://sendpassword.online/?encryptedMessage=${encodeURIComponent(encryptedMessage)}`;
+  function generateLink(encryptedSecret) {
+    return `https://sharepassword.online/?encryptedSecret=${encodeURIComponent(encryptedSecret)}`;
   }
 
   const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.has('encryptedMessage')) {
+  if (urlParams.has('encryptedSecret')) {
     secretContainer.style.display = 'none';
     secretContainer.style.opacity = '0';
     messageInput.readOnly = true;
@@ -52,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  async function encryptMessage(message, passphrase) {
+  async function encryptSecret(message, passphrase) {
     const encoder = new TextEncoder();
     const data = encoder.encode(message);
     const passphraseKey = await window.crypto.subtle.importKey(
@@ -78,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  async function decryptMessage(encryptedMessage, passphrase) {
-    const [encryptedDataB64, ivB64] = encryptedMessage.split('.');
+  async function decryptSecret(encryptedSecret, passphrase) {
+    const [encryptedDataB64, ivB64] = encryptedSecret.split('.');
     const encryptedData = Uint8Array.from(atob(encryptedDataB64), c => c.charCodeAt(0));
     const iv = Uint8Array.from(atob(ivB64), c => c.charCodeAt(0));
 
@@ -126,7 +130,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   closeDialogButton.addEventListener('click', () => {
-    closeDialog(linkDialog); // Close the dialog
+    closeDialog(linkDialog); 
+  });
+
+
+  generatedLinkInput.addEventListener('click', () => {
+    const tooltipContainer = generatedLinkInput.closest('.tooltip-container');
+
+    generatedLinkInput.select();
+    generatedLinkInput.setSelectionRange(0, 99999); 
+
+    document.execCommand('copy');
+
+    tooltipContainer.classList.add('active');
+
+    setTimeout(() => {
+      tooltipContainer.classList.remove('active');
+    }, 2000);
   });
 
 });

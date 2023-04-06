@@ -1,6 +1,10 @@
-# Send Password Online
+# Share Password Online
 
-Send Password Online is a simple web application that allows users to securely share encrypted messages with a passphrase. The recipient can decrypt the message by entering the passphrase.
+Share Password Online is a simple web application that allows users to securely share encrypted messages with a passphrase. The recipient can decrypt the message by entering the passphrase.
+
+## DEMO
+
+[https://sharepassword.online/](https://sharepassword.online)
 
 ## Features
 
