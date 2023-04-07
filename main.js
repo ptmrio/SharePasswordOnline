@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const secretContainer = document.querySelector('[data-id="secret-container"]');
   const messageInput = document.querySelector('[data-id="message"]');
   const passphraseInput = document.querySelector('[data-id="passphrase"]');
-  const submitButton = encryptionForm.querySelector('button[type="submit"]');
+  const revealPassswordButton = document.querySelector('[data-id="reveal-password"]');
   const linkDialog = document.querySelector('[data-id="link-dialog"]');
   const closeDialogButton = document.querySelector('[data-id="close-dialog"]');
 
@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
     secretContainer.style.display = 'none';
     secretContainer.style.opacity = '0';
     messageInput.readOnly = true;
-    submitButton.textContent = 'Decrypt';
   }
 
 
@@ -132,6 +131,38 @@ document.addEventListener('DOMContentLoaded', () => {
   closeDialogButton.addEventListener('click', () => {
     closeDialog(linkDialog);
   });
+
+
+  revealPassswordButton.addEventListener('click', () => {
+    if (passphraseInput.type === 'password') {
+      passphraseInput.type = 'text';
+    }
+    else {
+      passphraseInput.type = 'password';
+    }
+  });
+
+  (function autohide() {
+    const autohideElements = document.querySelectorAll('[data-autohide]');
+    autohideElements.forEach((element) => {
+      if (urlParams.has('encryptedSecret')) {
+        if (element.dataset.autohide === 'hide-on-encrypt') {
+          element.classList.remove('display-none');
+        }
+        else {
+          element.classList.add('display-none');
+        }
+      }
+      else {
+        if (element.dataset.autohide === 'hide-on-encrypt') {
+          element.classList.add('display-none');
+        }
+        else {
+          element.classList.remove('display-none');
+        }
+      }
+    });
+  })();
 
 
   document.querySelectorAll('[data-class="copy"]').forEach((element) => {
