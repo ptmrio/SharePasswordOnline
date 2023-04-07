@@ -168,9 +168,24 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-class="copy"]').forEach((element) => {
     element.addEventListener('click', () => {
       const tooltipContainer = element.closest('.tooltip-container');
+
       let clipboardText;
       if (element.dataset.copy) {
         clipboardText = element.dataset.copy;
+      }
+      else if (element.dataset.copyTarget) {
+        const target = document.querySelector(element.dataset.copyTarget);
+        if (target.value) {
+          target.select();
+          target.setSelectionRange(0, target.value.length);
+          clipboardText = target.value;
+        }
+        else if (target.textContent) {
+          clipboardText = target.textContent;
+        }
+        else {
+          return;
+        }
       }
       else if (element.value) {
         element.select();
@@ -186,11 +201,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
       navigator.clipboard.writeText(clipboardText);
 
-      tooltipContainer.classList.add('active');
+      if (tooltipContainer) {
+        tooltipContainer.classList.add('active');
 
-      setTimeout(() => {
-        tooltipContainer.classList.remove('active');
-      }, 2000);
+        setTimeout(() => {
+          tooltipContainer.classList.remove('active');
+        }, 2000);
+      }
+
     });
   });
 

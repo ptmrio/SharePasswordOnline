@@ -21,6 +21,12 @@ Share Password Online is a simple web application that allows users to securely 
 
 The recipient can visit the link, enter the passphrase, and click the "Decrypt" button to reveal the original message.
 
+## ToDo
+
+- [ ]  Update Tooltip to be more versitile
+- [x]  Copy to clipboard
+- [x]  Hide/show passphrase
+
 ## License
 
 This project is released under the [MIT License](https://opensource.org/licenses/MIT).
