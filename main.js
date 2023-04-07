@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const encryptionForm = document.querySelector('[data-id="encryption-form"]');
-  const generatedLinkInput = document.querySelector('[data-id="generated-link"]');
+  const generatedLinkTextarea = document.querySelector('[data-id="generated-link"]');
   const secretContainer = document.querySelector('[data-id="secret-container"]');
   const messageInput = document.querySelector('[data-id="message"]');
   const passphraseInput = document.querySelector('[data-id="passphrase"]');
@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
     encryptionForm.reportValidity();
 
     if (encryptionForm.checkValidity() && passphrase) {
-      
+
       if (!urlParams.has('encryptedSecret')) {
         const encryptedSecret = await encryptSecret(message, passphrase);
         const link = generateLink(encryptedSecret);
-        generatedLinkInput.value = link;
+        generatedLinkTextarea.value = link;
         showDialog(linkDialog); // Show the dialog
       } else {
-          decryptSecret(urlParams.get('encryptedSecret'), passphrase).then((decryptedMessage) => {
+        decryptSecret(urlParams.get('encryptedSecret'), passphrase).then((decryptedMessage) => {
           messageInput.value = decryptedMessage;
           secretContainer.style.display = 'grid';
           setTimeout(() => {
@@ -120,33 +120,49 @@ document.addEventListener('DOMContentLoaded', () => {
   function closeDialog(dialog) {
     dialog.setAttribute("closing", "");
     dialog.addEventListener(
-        "animationend",
-        () => {
-            dialog.removeAttribute("closing");
-            dialog.close();
-        },
-        {once: true}
+      "animationend",
+      () => {
+        dialog.removeAttribute("closing");
+        dialog.close();
+      },
+      { once: true }
     );
   }
 
   closeDialogButton.addEventListener('click', () => {
-    closeDialog(linkDialog); 
+    closeDialog(linkDialog);
   });
 
 
-  generatedLinkInput.addEventListener('click', () => {
-    const tooltipContainer = generatedLinkInput.closest('.tooltip-container');
+  document.querySelectorAll('[data-class="copy"]').forEach((element) => {
+    element.addEventListener('click', () => {
+      const tooltipContainer = element.closest('.tooltip-container');
+      let clipboardText;
+      if (element.dataset.copy) {
+        clipboardText = element.dataset.copy;
+      }
+      else if (element.value) {
+        element.select();
+        element.setSelectionRange(0, element.value.length);
+        clipboardText = element.value;
+      }
+      else if (element.textContent) {
+        clipboardText = element.textContent;
+      }
+      else {
+        return;
+      }
 
-    generatedLinkInput.select();
-    generatedLinkInput.setSelectionRange(0, 99999); 
+      document.execCommand('copy');
 
-    document.execCommand('copy');
+      tooltipContainer.classList.add('active');
 
-    tooltipContainer.classList.add('active');
-
-    setTimeout(() => {
-      tooltipContainer.classList.remove('active');
-    }, 2000);
+      setTimeout(() => {
+        tooltipContainer.classList.remove('active');
+      }, 2000);
+    });
   });
+
+
 
 });
