@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      document.execCommand('copy');
+      navigator.clipboard.writeText(clipboardText);
 
       tooltipContainer.classList.add('active');
 
