@@ -24,9 +24,10 @@ The recipient can visit the link, enter the passphrase, and click the "Decrypt" 
 ## ToDo
 
 - [ ]  Update Tooltip to be more versitile
+- [ ]  Move SVGs to external files or combine them for better readability of the html
 - [x]  Copy to clipboard
 - [x]  Hide/show passphrase
 
 ## License
 
-This project is released under the [MIT License](https://opensource.org/licenses/MIT).
+This project is released under the [MIT License](https://opensource.org/licenses/MIT). FontAwesome Free Icons are used. FontAwesome is a trademark of Fonticons, Inc. and is used under the [CC BY 4.0 License](https://creativecommons.org/licenses/by/4.0/).
