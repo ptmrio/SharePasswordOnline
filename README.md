@@ -25,6 +25,8 @@ The recipient can visit the link, enter the passphrase, and click the "Decrypt" 
 
 - [ ]  Update Tooltip to be more versitile
 - [ ]  Move SVGs to external files or combine them for better readability of the html
+- [ ]  Dark mode
+- [ ]  Unify Copy to clipboard UX and Hide/show passphrase buttons
 - [x]  Copy to clipboard
 - [x]  Hide/show passphrase
 

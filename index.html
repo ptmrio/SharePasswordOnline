@@ -330,6 +330,18 @@
             border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
         }
 
+        .visually-hidden {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
 
         /* Reveal Password */
         .input-with-button {
@@ -547,11 +559,12 @@
         </div>
 
         <dialog class="even-spacing" data-id="link-dialog">
-            <h2 id="generated-link-modal-heading">Generated Link</h2>
+            <h2>Generated Link</h2>
             <div class="even-spacing even-spacing--small">
-                <p>Copy this link and send it through your preferred method. Share the passphrase <strong>separately</strong> to ensure the security of the secret:</p>
+                <p id="generated-link-description">Copy this link and send it through your preferred method. Share the passphrase <strong>separately</strong> to ensure the security of the secret:</p>
                 <div class="tooltip-container">
-                    <textarea type="text" data-id="generated-link" data-class="copy" rows="2" readonly aria-describedby="generated-link-modal-heading"></textarea>
+                    <label for="generated-link" class="visually-hidden">Generated Link</label>
+                    <textarea type="text" id="generated-link" data-id="generated-link" data-class="copy" rows="2" readonly aria-describedby="generated-link-description"></textarea>
                     <div class="tooltip">
                         <div class="tooltip-inner">
                             Copied!
